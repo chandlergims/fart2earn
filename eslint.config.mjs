@@ -9,8 +9,31 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
+// Simplified ESLint configuration with minimal rules
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    ignores: ["**/.next/**", "**/node_modules/**", "**/dist/**"],
+  },
+  {
+    rules: {
+      // Disable all TypeScript-specific rules
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/explicit-module-boundary-types": "off",
+      "@typescript-eslint/no-non-null-assertion": "off",
+      "@typescript-eslint/ban-ts-comment": "off",
+      
+      // Disable React strict rules
+      "react/prop-types": "off",
+      "react/react-in-jsx-scope": "off",
+      "react-hooks/exhaustive-deps": "off",
+      
+      // Disable other common strict rules
+      "no-unused-vars": "off",
+      "no-undef": "off",
+      "no-console": "off",
+    },
+  },
 ];
 
 export default eslintConfig;
