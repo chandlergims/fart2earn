@@ -69,7 +69,7 @@ export default function About() {
         <div className="mb-8 border-b border-[#444] pb-8">
           <h2 className="text-sm font-bold text-[#e7d61b] mb-4">tokenomics</h2>
           <p className="text-gray-300 text-xs mb-4">
-            fart2earn operates on a weekly competition cycle with 20 sol distributed to the top performers each week.
+            fart2earn operates on a weekly competition cycle with 500 sol distributed to the top performers each week.
           </p>
           <div className="flex flex-col space-y-4 mb-4">
             <div>

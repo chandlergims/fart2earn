@@ -66,29 +66,15 @@ export default function Leaderboard() {
       setLoading(true);
       setError(null);
       
-      // Fetch top farts by likes
-      const response = await fetch('/api/farts?sort=likes&limit=30');
+      // Fetch top 10 farts by likes
+      const response = await fetch('/api/farts?sort=likes&limit=10');
       const data = await response.json();
       
       if (!response.ok) {
         throw new Error(data.error || 'Failed to fetch top farts');
       }
       
-      // Filter out farts with similar wallet addresses (first 4 letters)
-      const filteredFarts: Fart[] = [];
-      const prefixSet = new Set<string>();
-      
-      // Process farts to keep only one per wallet address prefix
-      data.farts.forEach((fart: Fart) => {
-        const prefix = fart.uploader.slice(0, 4);
-        if (!prefixSet.has(prefix)) {
-          prefixSet.add(prefix);
-          filteredFarts.push(fart);
-        }
-      });
-      
-      // Take only the top 10
-      setTopFarts(filteredFarts.slice(0, 10));
+      setTopFarts(data.farts);
     } catch (error) {
       console.error('Error fetching top farts:', error);
       setError('Failed to fetch leaderboard. Please try again later.');
@@ -212,7 +198,8 @@ export default function Leaderboard() {
               <thead>
                 <tr className="bg-[#2a2a2a] border-b border-[#444]">
                   <th className="py-3 px-4 text-left text-[#e7d61b] text-xs">rank</th>
-                  <th className="py-3 px-4 text-left text-[#e7d61b] text-xs">wallet</th>
+                  <th className="py-3 px-4 text-left text-[#e7d61b] text-xs">name</th>
+                  <th className="py-3 px-4 text-left text-[#e7d61b] text-xs">uploader</th>
                   <th className="py-3 px-4 text-left text-[#e7d61b] text-xs">likes</th>
                   <th className="py-3 px-4 text-left text-[#e7d61b] text-xs">dislikes</th>
                   <th className="py-3 px-4 text-left text-[#e7d61b] text-xs">date</th>
@@ -228,6 +215,11 @@ export default function Leaderboard() {
                   >
                     <td className="py-3 px-4">
                       <span className="font-bold text-[#e7d61b] text-xs">#{index + 1}</span>
+                    </td>
+                    <td className="py-3 px-4 text-xs">
+                      {loading && !('isPlaceholder' in fart) ? 
+                        <span className="text-gray-500">loading...</span> : 
+                        typeof fart.name === 'string' ? fart.name.toLowerCase() : fart.name}
                     </td>
                     <td className="py-3 px-4 text-gray-300 text-xs">
                       {loading && !('isPlaceholder' in fart) ? 

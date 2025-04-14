@@ -96,29 +96,8 @@ export async function POST(req: NextRequest) {
     
     await connectToDatabase();
     
-    // Get the first 4 letters of the uploader's wallet address
-    const uploaderPrefix = uploader.slice(0, 4);
-    
-    // Check if there's already a fart with a wallet address that starts with the same 4 letters
-    // but is not exactly the same address (to allow users to update their own farts)
-    const similarAddressFart = await Fart.findOne({
-      $and: [
-        { uploader: { $ne: uploader } },
-        { uploader: new RegExp(`^${uploaderPrefix}`) }
-      ]
-    });
-    
-    if (similarAddressFart) {
-      // Found a fart with a similar wallet address prefix
-      console.log(`Found a fart with a similar wallet address prefix: ${similarAddressFart.uploader}`);
-      return NextResponse.json(
-        { error: 'Potential spam detected. Another wallet with a similar address pattern already exists.' },
-        { status: 400 }
-      );
-    }
-    
     // Check if the user already has a fart uploaded
-    const existingFart = await Fart.findOne({ uploader });
+    const existingFart = await Fart.findOne({ uploader } as any);
     
     if (existingFart) {
       // User already has a fart, update it with the new one
@@ -150,7 +129,7 @@ export async function POST(req: NextRequest) {
       likes: 0,
       dislikes: 0,
       voters: []
-    });
+    } as any);
     
     return NextResponse.json({
       success: true,
