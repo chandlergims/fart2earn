@@ -45,12 +45,29 @@ export async function GET(req: NextRequest) {
     console.log(`Skip: ${skip}, Limit: ${limit}`);
     
     // Fetch farts with pagination
-    const farts = await Fart.find(query)
+    let farts = await Fart.find(query)
       .sort(sortOption)
       .skip(skip)
       .limit(limit)
       .lean();
-    
+
+    // Always ensure the specific fart is at the top if it exists
+    const pinnedFart = await Fart.findOne({
+      name: "nubs fart (proud)",
+      uploader: "AdVy...M4Zh"
+    }).lean();
+
+    if (pinnedFart) {
+      // Remove the pinned fart if it's in the regular results
+      farts = farts.filter(f => f._id.toString() !== pinnedFart._id.toString());
+      // Add it to the beginning
+      farts.unshift(pinnedFart);
+      // Maintain the limit
+      if (farts.length > limit) {
+        farts.pop();
+      }
+    }
+
     console.log(`Found ${farts.length} farts`);
     if (farts.length > 0) {
       console.log(`First fart: ${farts[0].name}, likes: ${farts[0].likes}, dislikes: ${farts[0].dislikes}`);

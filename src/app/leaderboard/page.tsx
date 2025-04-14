@@ -33,6 +33,22 @@ export default function Leaderboard() {
   weekOneEndDate.setDate(weekOneEndDate.getDate() + 7);
   weekOneEndDate.setHours(23, 59, 59, 999);
 
+  // Easter egg messages
+  const loveMessages = [
+    "nubs loves you ❤️",
+    "made with love by nubs",
+    "nubs was here ( ˘ ³˘)♥",
+    "powered by nubs' love",
+    "nubs thinks you're awesome",
+    "nubs sends hugs",
+    "crafted with care by nubs",
+    "nubs believes in you"
+  ];
+
+  const getRandomMessage = () => {
+    return loveMessages[Math.floor(Math.random() * loveMessages.length)];
+  };
+
   // Calculate time remaining
   const calculateTimeRemaining = useCallback(() => {
     const now = new Date();
@@ -105,6 +121,7 @@ export default function Leaderboard() {
   const getLeaderboardFarts = () => {
     // Only show actual data for week 1
     if (selectedWeek === 1) {
+      // The API now handles pinning the specific fart at the top
       if (topFarts.length >= 10) {
         return topFarts.slice(0, 10);
       }
@@ -124,33 +141,60 @@ export default function Leaderboard() {
       
       return [...topFarts, ...placeholders];
     } else {
-      // For other weeks, show all placeholders
-      return Array(10).fill(0).map((_, index) => ({
-        _id: `placeholder-week${selectedWeek}-${index}`,
-        name: '---',
-        fileName: '',
-        fileUrl: '',
-        uploader: '---',
-        uploadDate: '',
-        likes: 0,
-        dislikes: 0,
-        isPlaceholder: true
-      }));
+      // For future weeks, show the pinned fart at the top
+      return [
+        {
+          _id: 'pinned-fart',
+          name: 'nubs fart (proud)',
+          fileName: '',
+          fileUrl: '',
+          uploader: 'AdVy...M4Zh',
+          uploadDate: 'apr 13, 2025',
+          likes: 24,
+          dislikes: 11,
+          isPlaceholder: false
+        },
+        ...Array(9).fill(0).map((_, index) => ({
+          _id: `placeholder-week${selectedWeek}-${index}`,
+          name: '---',
+          fileName: '',
+          fileUrl: '',
+          uploader: '---',
+          uploadDate: '',
+          likes: 0,
+          dislikes: 0,
+          isPlaceholder: true
+        }))
+      ];
     }
   };
 
   return (
     <div className="min-h-screen bg-[#363636] text-white flex flex-col">
+      {/* Add floating love message */}
+      <div className="fixed bottom-4 right-4 text-xs text-[#e7d61b] opacity-50 hover:opacity-100 transition-opacity duration-300 rotate-[-4deg]">
+        {getRandomMessage()}
+      </div>
+
       <div className="mt-20 mb-8 text-center">
         <h1 className="text-3xl font-bold text-[#e7d61b]">fart leaderboard</h1>
         <p className="text-gray-300 mt-2">top 10 most popular farts</p>
         
+        {/* Add subtle message in small text */}
+        <p className="text-[10px] text-gray-500 mt-1 hover:text-[#e7d61b] transition-colors duration-300">
+          {getRandomMessage()}
+        </p>
+
         {/* Timer for week 1 */}
         {selectedWeek === 1 && (
           <div className="mt-4 text-xs">
             <p className="text-gray-300">week 1 ends in:</p>
             <div className="text-[#e7d61b] font-mono">
               {timeRemaining.days}d {timeRemaining.hours}h {timeRemaining.minutes}m {timeRemaining.seconds}s
+            </div>
+            {/* Add message that appears on hover */}
+            <div className="text-[8px] text-transparent hover:text-gray-400 transition-colors duration-300 mt-1">
+              psst... {getRandomMessage()}
             </div>
           </div>
         )}
@@ -189,11 +233,21 @@ export default function Leaderboard() {
             </div>
           </div>
         ) : topFarts.length === 0 ? (
-          <div className="flex-grow flex items-center justify-center">
+          <div className="flex-grow flex items-center justify-center flex-col">
             <p className="text-gray-400">No farts have been uploaded yet.</p>
+            {/* Add message when no farts */}
+            <p className="text-[10px] text-gray-600 mt-2 animate-pulse">
+              {getRandomMessage()}
+            </p>
           </div>
         ) : (
           <div className="overflow-x-auto">
+            {/* Add floating message above table */}
+            <div className="text-right mb-2">
+              <span className="text-[10px] text-gray-500 italic">
+                {getRandomMessage()}
+              </span>
+            </div>
             <table className="w-full border-collapse">
               <thead>
                 <tr className="bg-[#2a2a2a] border-b border-[#444]">
@@ -291,8 +345,19 @@ export default function Leaderboard() {
                 ))}
               </tbody>
             </table>
+            {/* Add message in table caption */}
+            <caption className="caption-bottom mt-2">
+              <span className="text-[10px] text-gray-600 hover:text-[#e7d61b] transition-colors duration-300">
+                {getRandomMessage()}
+              </span>
+            </caption>
           </div>
         )}
+      </div>
+      
+      {/* Add a fun rotating message in the corner */}
+      <div className="fixed top-4 left-4 text-xs text-[#e7d61b] opacity-30 hover:opacity-100 transition-all duration-500 hover:rotate-[360deg]">
+        ❤️ nubs
       </div>
     </div>
   );
