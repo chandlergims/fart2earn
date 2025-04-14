@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
     console.log(`Skip: ${skip}, Limit: ${limit}`);
     
     // Fetch farts with pagination
-    const farts = await Fart.find(query)
+    const farts = await Fart.find(query as any)
       .sort(sortOption)
       .skip(skip)
       .limit(limit)
@@ -96,7 +96,30 @@ export async function POST(req: NextRequest) {
     
     await connectToDatabase();
     
-    // Create a new fart record
+    // Check if the user already has a fart uploaded
+    const existingFart = await Fart.findOne({ uploader } as any);
+    
+    if (existingFart) {
+      // User already has a fart, update it with the new one
+      console.log(`User ${uploader} already has a fart. Replacing it.`);
+      
+      // Update the existing fart with new data
+      existingFart.name = name;
+      existingFart.fileName = fileName;
+      existingFart.fileUrl = fileUrl;
+      existingFart.uploadDate = new Date();
+      // Keep the existing votes
+      
+      await existingFart.save();
+      
+      return NextResponse.json({
+        success: true,
+        fart: existingFart,
+        replaced: true
+      });
+    }
+    
+    // Create a new fart record if the user doesn't have one yet
     const fart = await Fart.create({
       name,
       fileName,
@@ -106,11 +129,12 @@ export async function POST(req: NextRequest) {
       likes: 0,
       dislikes: 0,
       voters: []
-    });
+    } as any);
     
     return NextResponse.json({
       success: true,
-      fart
+      fart,
+      replaced: false
     });
   } catch (error) {
     console.error('Error uploading fart:', error);

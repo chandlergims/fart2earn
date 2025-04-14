@@ -314,6 +314,11 @@ export default function Home() {
         throw new Error(saveData.error || 'Failed to save fart');
       }
       
+      // Show a message if the user replaced their existing fart
+      if (saveData.replaced) {
+        alert('Your previous fart has been replaced with the new one.');
+      }
+      
       // Add the new fart to the list
       setFarts([{
         ...saveData.fart,
@@ -503,6 +508,12 @@ export default function Home() {
                   >
                     ×
                   </button>
+                </div>
+                
+                <div className="mb-4 p-3 bg-[#1f1f1f] rounded-md border border-[#444]">
+                  <p className="text-gray-300 text-xs">
+                    note: you can only have one fart at a time. uploading a new fart will replace your previous one.
+                  </p>
                 </div>
                 
                 <div className="mb-6">
