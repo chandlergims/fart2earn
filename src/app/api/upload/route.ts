@@ -1,22 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import { existsSync } from 'fs';
+import { uploadFileToFirebase } from '@/lib/firebase';
 
 export async function POST(req: NextRequest) {
   try {
-    // Ensure uploads directory exists
-    const uploadsDir = path.join(process.cwd(), 'public/uploads');
-    if (!existsSync(uploadsDir)) {
-      await mkdir(uploadsDir, { recursive: true });
-    }
-
+    console.log('Starting file upload process...');
+    
     // Parse the form data
     const formData = await req.formData();
     const file = formData.get('file') as File;
     
     if (!file) {
+      console.log('No file uploaded');
       return NextResponse.json(
         { error: 'No file uploaded' },
         { status: 400 }
@@ -25,6 +20,7 @@ export async function POST(req: NextRequest) {
 
     // Check if the file is an audio file
     if (!file.type.includes('audio')) {
+      console.log(`Invalid file type: ${file.type}`);
       return NextResponse.json(
         { error: 'Only audio files are allowed' },
         { status: 400 }
@@ -36,17 +32,20 @@ export async function POST(req: NextRequest) {
     
     // Generate a unique filename
     const fileName = `fart_${uuidv4()}.${fileExtension}`;
-    const filePath = path.join(uploadsDir, fileName);
+    
+    console.log(`Generated filename: ${fileName}`);
     
     // Convert file to ArrayBuffer
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
     
-    // Write the file to disk
-    await writeFile(filePath, buffer);
+    console.log(`Uploading file to Firebase...`);
     
-    // Generate the URL for the file
-    const fileUrl = `/uploads/${fileName}`;
+    // Upload file to Firebase Storage
+    const fileUrl = await uploadFileToFirebase(buffer, fileName, file.type);
+    
+    console.log(`File uploaded to Firebase: ${fileName}`);
+    console.log(`File URL: ${fileUrl}`);
     
     return NextResponse.json({
       success: true,
@@ -59,7 +58,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('Error uploading file:', error);
     return NextResponse.json(
-      { error: 'Failed to upload file' },
+      { error: `Failed to upload file: ${error.message}` },
       { status: 500 }
     );
   }

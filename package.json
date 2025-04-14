@@ -17,6 +17,7 @@
     "@types/formidable": "^3.4.5",
     "@types/uuid": "^10.0.0",
     "cookies-next": "^5.1.0",
+    "firebase": "^11.6.0",
     "formidable": "^3.5.2",
     "mongoose": "^8.13.2",
     "next": "15.3.0",

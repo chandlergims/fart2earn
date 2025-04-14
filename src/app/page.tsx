@@ -437,7 +437,7 @@ export default function Home() {
         
         <div className="max-w-md mx-auto my-4">
           <AudioPlayer 
-            src="/audio/goatse.mp3" 
+            src="/api/featured-audio" 
             title="Featured Audio Track" 
             className="shadow-lg"
           />

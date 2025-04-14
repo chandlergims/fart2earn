@@ -12,6 +12,13 @@ const nextConfig = {
   },
   // Disable strict mode for React
   reactStrictMode: false,
+  // Configure image domains for Firebase Storage
+  images: {
+    domains: [
+      'firebasestorage.googleapis.com',
+      'audio-f12b2.firebasestorage.app'
+    ],
+  },
 };
 
 module.exports = nextConfig;
