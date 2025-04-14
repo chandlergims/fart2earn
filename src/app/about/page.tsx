@@ -11,7 +11,7 @@ export default function About() {
         <div className="mb-8 border-b border-[#444] pb-8">
           <h2 className="text-sm font-bold text-[#e7d61b] mb-4">what is fart2earn?</h2>
           <p className="text-gray-300 text-xs mb-4">
-            fart2earn is a decentralized fart-to-earn protocol built on the solana blockchain.
+            fart2earn is a decentralized fart-to-earn protocol built on solana.
           </p>
           <p className="text-gray-300 text-xs mb-4">
             upload your best farts, earn votes, win sol. powered by cheeks, judged by the crowd.

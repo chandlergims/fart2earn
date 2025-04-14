@@ -59,7 +59,11 @@ export default function Navbar() {
           </Link>
         </div>
         
-        <div className="flex">
+        <div className="flex items-center space-x-4">
+          <Link href="/hall-of-farts" className="text-[#e7d61b] hover:text-[#c9ba17] transition-colors cursor-pointer">
+            hall of farts
+          </Link>
+          
           {connected ? (
             <div className="flex items-center">
               <span className="text-sm text-gray-300 mr-3 hidden md:inline">
