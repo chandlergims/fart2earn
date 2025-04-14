@@ -36,6 +36,14 @@ export default function Navbar() {
           >
             twitter
           </a>
+          <a 
+            href="https://github.com/chandlergims/fart2earn" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="text-[#e7d61b] hover:text-[#c9ba17] transition-colors cursor-pointer"
+          >
+            github
+          </a>
         </div>
         
         {/* Absolutely positioned center element */}

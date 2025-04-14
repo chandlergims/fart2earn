@@ -16,8 +16,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Fart2Earn - Next.js App",
-  description: "A Next.js application with a responsive navbar"
+  title: "fart2earn",
+  description: "decentralized fart-to-earn protocol",
+  icons: {
+    icon: "/thelogo.png"
+  }
 };
 
 export default function RootLayout({
