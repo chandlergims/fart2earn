@@ -627,7 +627,7 @@ export default function Home() {
                       <div className="p-3 flex-grow">
                         <div className="flex justify-between items-center mb-1">
                           <h3 className="font-medium text-white text-sm">
-                            {fart.name.length > 20 ? fart.name.substring(0, 20) + '...' : fart.name}
+                            {fart.uploader.slice(0, 4)}...{fart.uploader.slice(-4)}
                           </h3>
                           <div className="flex items-center space-x-2">
                             <button
@@ -672,7 +672,6 @@ export default function Home() {
                         </div>
                         
                         <div className="flex flex-col space-y-1 text-xs text-gray-400 mb-2">
-                          <p>By: {fart.uploader.slice(0, 4)}...{fart.uploader.slice(-4)}</p>
                           <p className="text-[#e7d61b]/70">
                             {new Date(fart.uploadDate).toLocaleDateString()} • {new Date(fart.uploadDate).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                           </p>

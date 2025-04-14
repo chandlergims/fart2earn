@@ -18,7 +18,7 @@ const SAMPLE_WINNERS: Winner[] = [
     name: 'fartmaster3000',
     fartName: 'the thunderclap',
     walletAddress: 'EjcZMQ...PF97uXr',
-    prize: '0.5 SOL',
+    prize: '5 SOL',
     date: 'april 1, 2025'
   },
   {
@@ -26,7 +26,7 @@ const SAMPLE_WINNERS: Winner[] = [
     name: 'gasgiant',
     fartName: 'silent but deadly',
     walletAddress: 'Gh73mN...Kj8dPq',
-    prize: '0.3 SOL',
+    prize: '3 SOL',
     date: 'march 15, 2025'
   },
   {
@@ -34,7 +34,7 @@ const SAMPLE_WINNERS: Winner[] = [
     name: 'rumbletumble',
     fartName: 'bass cannon',
     walletAddress: '7XtPz5...9vBnLs',
-    prize: '0.2 SOL',
+    prize: '1 SOL',
     date: 'february 28, 2025'
   }
 ];

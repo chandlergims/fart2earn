@@ -20,6 +20,7 @@
     "firebase": "^11.6.0",
     "formidable": "^3.5.2",
     "mongoose": "^8.13.2",
+    "mongosh": "^2.5.0",
     "next": "15.3.0",
     "next-auth": "^4.24.11",
     "react": "^19.0.0",

@@ -38,6 +38,22 @@ export async function POST(req: NextRequest) {
       );
     }
     
+    // Check if the fart already has 20 likes and the user is trying to like it
+    if (vote === 'like' && fart.likes >= 20) {
+      // Check if the user has already liked this fart
+      const hasAlreadyLiked = fart.voters.findIndex(
+        (voter: Voter) => voter.walletAddress === walletAddress && voter.vote === 'like'
+      ) !== -1;
+      
+      // If they haven't already liked it, prevent them from adding a new like
+      if (!hasAlreadyLiked) {
+        return NextResponse.json(
+          { error: 'This fart has reached the maximum number of likes (20)' },
+          { status: 400 }
+        );
+      }
+    }
+    
     // Check if user has already voted
     const existingVoteIndex = fart.voters.findIndex(
       (voter: Voter) => voter.walletAddress === walletAddress

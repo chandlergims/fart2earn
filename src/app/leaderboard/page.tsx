@@ -66,15 +66,29 @@ export default function Leaderboard() {
       setLoading(true);
       setError(null);
       
-      // Fetch top 10 farts by likes
-      const response = await fetch('/api/farts?sort=likes&limit=10');
+      // Fetch top farts by likes
+      const response = await fetch('/api/farts?sort=likes&limit=30');
       const data = await response.json();
       
       if (!response.ok) {
         throw new Error(data.error || 'Failed to fetch top farts');
       }
       
-      setTopFarts(data.farts);
+      // Filter out farts with similar wallet addresses (first 4 letters)
+      const filteredFarts: Fart[] = [];
+      const prefixSet = new Set<string>();
+      
+      // Process farts to keep only one per wallet address prefix
+      data.farts.forEach((fart: Fart) => {
+        const prefix = fart.uploader.slice(0, 4);
+        if (!prefixSet.has(prefix)) {
+          prefixSet.add(prefix);
+          filteredFarts.push(fart);
+        }
+      });
+      
+      // Take only the top 10
+      setTopFarts(filteredFarts.slice(0, 10));
     } catch (error) {
       console.error('Error fetching top farts:', error);
       setError('Failed to fetch leaderboard. Please try again later.');
@@ -96,9 +110,9 @@ export default function Leaderboard() {
 
   // Calculate reward based on position
   const getReward = (position: number) => {
-    // Start with 100 SOL for 1st place and decrease gradually to 10 SOL for 10th place
-    const rewards = [100, 80, 65, 55, 45, 35, 25, 20, 15, 10];
-    return rewards[position] || 10;
+    // Start with 5 SOL for 1st place and decrease gradually to 0.5 SOL for 10th place
+    const rewards = [5, 3, 2, 1.5, 1.2, 1, 0.8, 0.7, 0.6, 0.5];
+    return rewards[position] || 0.5;
   };
 
   // Generate farts for the leaderboard based on selected week
@@ -198,8 +212,7 @@ export default function Leaderboard() {
               <thead>
                 <tr className="bg-[#2a2a2a] border-b border-[#444]">
                   <th className="py-3 px-4 text-left text-[#e7d61b] text-xs">rank</th>
-                  <th className="py-3 px-4 text-left text-[#e7d61b] text-xs">name</th>
-                  <th className="py-3 px-4 text-left text-[#e7d61b] text-xs">uploader</th>
+                  <th className="py-3 px-4 text-left text-[#e7d61b] text-xs">wallet</th>
                   <th className="py-3 px-4 text-left text-[#e7d61b] text-xs">likes</th>
                   <th className="py-3 px-4 text-left text-[#e7d61b] text-xs">dislikes</th>
                   <th className="py-3 px-4 text-left text-[#e7d61b] text-xs">date</th>
@@ -215,11 +228,6 @@ export default function Leaderboard() {
                   >
                     <td className="py-3 px-4">
                       <span className="font-bold text-[#e7d61b] text-xs">#{index + 1}</span>
-                    </td>
-                    <td className="py-3 px-4 text-xs">
-                      {loading && !('isPlaceholder' in fart) ? 
-                        <span className="text-gray-500">loading...</span> : 
-                        typeof fart.name === 'string' ? fart.name.toLowerCase() : fart.name}
                     </td>
                     <td className="py-3 px-4 text-gray-300 text-xs">
                       {loading && !('isPlaceholder' in fart) ? 
